@@ -1,0 +1,319 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil Calibri;}}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\b\f0\fs22\lang9 MODULE 2- SQL PROJECT LIBRARY MANAGEMENT SYSTEM\par
+\f1 Topic : Library Management System\par
+You are going to build a project based on Library Management System. It keeps track of all information about books in the library, their cost, status and total number of books available in the library.\par
+\par
+Create a database named library and following TABLES in the database: \par
+\par
+1. Branch \par
+2. Employee \par
+3. Books\par
+4. Customer\par
+5. IssueStatus\par
+6. ReturnStatus \par
+\par
+Attributes for the tables: \par
+\par
+1. Branch\par
+Branch_no - Set as PRIMARY KEY  \par
+Manager_Id  \par
+Branch_address  \par
+Contact_no \par
+2. Employee  \par
+Emp_Id \endash  Set as PRIMARY KEY  \par
+Emp_name  \par
+Position  \par
+Salary\par
+Branch_no - Set as FOREIGN KEY and it refer Branch_no in Branch table  \par
+3. Books  \par
+ISBN - Set as PRIMARY KEY  \par
+Book_title  \par
+Category  \par
+Rental_Price  \par
+Status [Give yes if book available and no if book not available]  \par
+Author  \par
+Publisher\par
+\par
+\par
+4. Customer  \par
+Customer_Id - Set as PRIMARY KEY  \par
+Customer_name  \par
+Customer_address  \par
+Reg_date \par
+5. IssueStatus  \par
+Issue_Id - Set as PRIMARY KEY  \par
+Issued_cust \endash  Set as FOREIGN KEY and it refer customer_id in CUSTOMER table  Issued_book_name \par
+Issue_date \par
+Isbn_book \endash  Set as FOREIGN KEY and it should refer isbn in BOOKS table \par
+6. ReturnStatus  \par
+Return_Id - Set as PRIMARY KEY  \par
+Return_cust  \par
+Return_book_name  \par
+Return_date  \par
+Isbn_book2 - Set as FOREIGN KEY and it should refer isbn in BOOKS table \par
+\par
+\par
+Display all the tables and Write the queries for the following :\par
+\par
+1. Retrieve the book title, category, and rental price of all available books. \par
+2. List the employee names and their respective salaries in descending order of salary. \par
+3. Retrieve the book titles and the corresponding customers who have issued those books. \par
+4. Display the total count of books in each category. \par
+5. Retrieve the employee names and their positions for the employees whose salaries are above Rs.50,000. \par
+6. List the customer names who registered before 2022-01-01 and have not issued any books yet. \par
+7. Display the branch numbers and the total count of employees in each branch. \par
+8. Display the names of customers who have issued books in the month of June 2023.\par
+9. Retrieve book_title from book table containing history. \par
+10.Retrieve the branch numbers along with the count of employees for branches having more than 5 employees\par
+11. Retrieve the names of employees who manage branches and their respective branch addresses.\par
+12.  Display the names of customers who have issued books with a rental price higher than Rs. 25.\f0\par
+------ SQL QUERY\par
+-- Topic : Library Management System\par
+create database LIBRARY;\par
+USE LIBRARY;\par
+\par
+CREATE TABLE Branch (\par
+  Branch_no INT PRIMARY KEY,\par
+  Manager_Id INT,\par
+  Branch_address VARCHAR(200),\par
+  Contact_no VARCHAR(15));\par
+\par
+desc Branch;\par
+\par
+CREATE TABLE Employee (\par
+  Emp_Id INT PRIMARY KEY,\par
+  Emp_name VARCHAR(255),\par
+  Position VARCHAR(100),\par
+  Salary DECIMAL(10, 2),\par
+  Branch_no INT,\par
+  FOREIGN KEY (Branch_no) REFERENCES Branch(Branch_no));\par
+  \par
+desc employee ;\par
+\par
+CREATE TABLE Books (\par
+  ISBN VARCHAR(20) PRIMARY KEY,\par
+  Book_title VARCHAR(255),\par
+  Category VARCHAR(100),\par
+  Rental_Price DECIMAL(10, 2),\par
+  Status VARCHAR(5),\par
+  Author VARCHAR(100),\par
+  Publisher VARCHAR(100));\par
+\par
+desc books;\par
+\par
+CREATE TABLE Customer (\par
+  Customer_Id INT PRIMARY KEY,\par
+  Customer_name VARCHAR(255),\par
+  Customer_address VARCHAR(255),\par
+  Reg_date DATE);\par
+desc customer ;\par
+\par
+CREATE TABLE IssueStatus (\par
+  Issue_Id INT PRIMARY KEY,\par
+  Issued_cust INT,\par
+  Issued_book_name VARCHAR(255),\par
+  Issue_date DATE,\par
+  Isbn_book VARCHAR(20),\par
+  FOREIGN KEY (Issued_cust) REFERENCES Customer(Customer_Id),\par
+  FOREIGN KEY (Isbn_book) REFERENCES Books(ISBN));\par
+\par
+desc issuestatus;\par
+CREATE TABLE ReturnStatus (\par
+  Return_Id INT PRIMARY KEY,\par
+  Return_cust INT,\par
+  Return_book_name VARCHAR(255),\par
+  Return_date DATE,\par
+  Isbn_book2 VARCHAR(20),\par
+  FOREIGN KEY (Return_cust) REFERENCES Customer(Customer_Id),\par
+  FOREIGN KEY (Isbn_book2) REFERENCES Books(ISBN));\par
+  \par
+  desc returnstatus;\par
+\par
+INSERT INTO Branch (Branch_no, Manager_Id, Branch_address, Contact_no)\par
+VALUES\par
+(1, 101, 'New Delhi', '1112345678'),\par
+(2, 102, 'Mumbai', '2223456789'),\par
+(3, 103, 'banglore', '2123756789'),\par
+(4, 104, 'kochi', '1123236789'),\par
+(5, 105, 'tamilnadu', '1298765432'),\par
+(6, 106, 'andra', '2334567890'),\par
+(7, 107, 'kerala', '2490876754'),\par
+(8, 108, 'Mumbai', '2523456999'),\par
+(9, 109, 'newdelhi', '2223333567'),\par
+(10, 110, 'karnadaka', '2023498789'),\par
+(11, 111, 'chenni', '2222343289'),\par
+(12, 112, 'panjab', '2823090989'),\par
+(13, 113, 'Mumbai', '2923498769'),\par
+(14, 114, 'kerala', '2323234569'),\par
+(15, 115, 'UP', '2529878967'),\par
+(16, 116, 'Karnadaka', '4434870989');\par
+\par
+select * from branch;\par
+\par
+INSERT INTO Employee (Emp_Id, Emp_name, Position, Salary, Branch_no)\par
+VALUES\par
+(101, 'Rajesh Kumar', 'Manager', 50000, 1),\par
+(102, 'Suresh TP', 'Assistant Manager', 40000, 1),\par
+(103, 'Ramesh KP', 'Manager', 55000, 2),\par
+(104, 'Mahesh KR', 'store keeper', 45000, 2),\par
+(105, 'Mahesh GP', 'librarian', 45000, 2),\par
+(106, 'Madhu KV', 'Assistant Manager', 45000, 3),\par
+(107, 'Murali Kumar', 'librarian', 45000, 4),\par
+(108, 'Sandeep Boss', 'Assistant Manager', 45000, 5),\par
+(109, 'Syama Akhil', 'Assistant Manager', 45000, 6),\par
+(110, 'Vasundara  Devi ', 'Assistant Manager', 45000, 7),\par
+(111, 'Aadhi Nair', 'librarian', 45000, 2),\par
+(112, 'Sachin tendukar', 'Assistant Manager', 45000, 8),\par
+(113, 'Deleep KV', 'Assistant Manager', 45000, 9),\par
+(114, 'Nayana Raj', 'Assistant Manager', 45000, 10),\par
+(115, 'Josmi Jose', 'Assistant Manager', 45000, 11),\par
+(116, 'Raghi Abraham', 'librarian', 45000, 12),\par
+(117, 'Ramya george', 'librarian', 45000, 6),\par
+(118, 'Praveen Kuriyan', ' Manager', 45000,7 ),\par
+(119, 'Nishath KV', 'Manager', 60000, 8);\par
+\par
+select * from employee;\par
+\par
+INSERT INTO Books (ISBN, Book_title, Category, Rental_Price, Status, Author, Publisher)\par
+VALUES\par
+('1234567890', 'History of India', 'History', 20, 'yes', 'Rajmohan Gandhi', 'Penguin Books'),\par
+('2345678901', 'The Great Gatsby', ' Non Fiction', 25, 'yes', 'F Scott Fitzgerald', 'Charles Scribners Sons'),\par
+('2345678902', 'to kill a mockingbird', ' classic Fiction', 25, 'yes', 'harper lee', 'j b lippincott and co'),\par
+('2345678903', 'the hunger games', 'young adult dystopin', 25, 'yes', 'suzanne collins', 'scholastic press'),\par
+('2345678904', 'the da vinci code', 'mystery thriller', 30, 'no', 'dan brown', 'doubleday'),\par
+('2345678905', 'pride and prejudice', 'classic romance', 30, 'yes', 'jane austen', 't egerton'),\par
+('2345678906', 'catcher in the rye', ' classic coming of age', 25, 'yes', 'j d salinger', 'little brown company'),\par
+('2345678907', 'The handmaids tale', ' dystopian Fiction', 25, 'no', 'margaret atwood', 'mcclelland and stewart'),\par
+('2345678908', 'the loard of the rings', 'Fantacy adventure', 25, 'yes', 'j.r.r tolkien', 'allen and unwin'),\par
+('2345678909', 'The  picture of dorian gray', 'classic horror', 25, 'yes', 'oscar wilde', 'lippincotts magazine'),\par
+('2345678910', '1984', 'classic dystopian', 25, 'no', 'george orwell', 'secker and warburg'),\par
+('23456789011', 'The girl with the dragon tattoo', 'mystery thriller', 25, 'yes', 'stieg larsson', 'norstedts'),\par
+('23456789012', 'The nightingale', ' historical Fiction', 25, 'yes', 'krisin hannah', 'st martins press'),\par
+('23456789013', 'the hitchhiker guide to the galaxy', ' science Fiction comedy', 25, 'yes', 'douglas adams', 'pan books'),\par
+('23456789014', 'The power', ' speculative Fiction', 25, 'yes', 'naomi alderman', ' little,brown and company'),\par
+('2345678915', 'sapiensa brief history of humankind', ' non Fiction history', 25, 'yes', 'yuval noah harari', 'harvill secker'),\par
+('23456789016', 'the immortal life of henrietta lacks', ' non Fiction science', 25, 'yes', 'rebecca skloot', 'crown publisher'),\par
+('23456789017', 'The devil in the white city', ' non Fiction history', 25, 'yes', 'erik larson', 'crown publisher'),\par
+('23456789018', 'The song of achilles', ' historical Fiction', 25, 'yes', 'madeline miller', 'ecco press'),\par
+('23456789019', 'the seven husbands of evelyn hugo', ' contemporary Fiction', 25, 'no', 'taylor jenkins reid', 'atria books'),\par
+('2345678920', 'The silent patient', 'phychological thriller', 25, 'yes', ' alex michaelides', 'celadon books'),\par
+('3456789021', 'The Origin of Species', 'Science', 30, 'yes', 'Charles Darwin', 'John Murray');\par
+\par
+select * from books;\par
+\par
+INSERT INTO Customer (Customer_Id, Customer_name, Customer_address, Reg_date)\par
+VALUES\par
+(1, 'Amit Kumar', 'New Delhi 123', '2020-01-01'),\par
+(2, 'Sumit Kumar', 'Mumbai 456', '2021-04-02'),\par
+(3, 'Raj Kumar', 'panjab 876', '2024-06-02'),\par
+(4, 'Muhammed KM', 'kerala 654', '2021-09-22'),\par
+(5, 'Subina Rohith', 'up 890', '2022-02-22'),\par
+(6, 'Vijay Das', 'Mumbai 654', '2023-02-12'),\par
+(7, 'Pandit KA', 'chenni 432', '2024-02-10'),\par
+(8, 'malavika praveen', 'newdelhi 457', '2020-02-09'),\par
+(9, 'Sunil Kv', 'banglore 223', '2020-02-02'),\par
+(10, 'syndhya george', 'kochi 678', '2020-03-03');\par
+\par
+select * from customer ;\par
+\par
+INSERT INTO IssueStatus (Issue_Id, Issued_cust, Issued_book_name, Issue_date, Isbn_book)\par
+VALUES\par
+(1, 1, 'History of India', '2020-01-01', '1234567890'),\par
+(2, 2, 'The Great Gatsby', '2021-04-02', '2345678901'),\par
+(3, 3, 'the girl with dragon tattoo', '2024-06-02', '23456789011'),\par
+(4, 5, 'The hitchhiker guide to the galaxy', '2022-02-22', '23456789013'),\par
+(5, 7, 'The  immoral life of henrietta lacks', '2024-02-10', '23456789016'),\par
+(6, 8, 'The devil in the white city', '2020-02-09', '23456789017'),\par
+(7, 4, 'The nightingale', '2021-09-22', '23456789012'),\par
+(8, 6, 'The power', '2023-02-12', '23456789014'),\par
+(9, 2, 'to kill a mockingbird', '2021-04-02', '2345678902');\par
+select * from issuestatus;\par
+\par
+INSERT INTO ReturnStatus (Return_Id, Return_cust, Return_book_name, Return_date, Isbn_book2)\par
+VALUES\par
+(1, 1, 'History of India', '2020-01-15', '1234567890'),\par
+(2, 2, 'The Great Gatsby', '2021-05-15', '2345678901'),\par
+(3, 3, 'the girl with dragon tattoo', '2024-07-07', '23456789011'),\par
+(4, 4, 'the hitchhiker guide to the galaxy', '2022-03-15', '23456789013'),\par
+(5, 5, 'the devil in the white city ', '2020-02-15', '23456789017'),\par
+(6, 6, 'the nightinggale', '2021-10-15', '23456789012'),\par
+(7, 7, 'The power', '2023-02-12', '2345678902');\par
+\par
+select * from returnstatus;\par
+\par
+\par
+-- 1. Retrieve the book title, category, and rental price of all available books.\par
+\par
+SELECT Book_title, Category, Rental_Price FROM Books WHERE Status = 'yes';\par
+\par
+-- 2. List the employee names and their respective salaries in descending order of salary.\par
+\par
+SELECT Emp_name, Salary FROM Employee ORDER BY Salary DESC;\par
+\par
+-- 3. Retrieve the book titles and the corresponding customers who have issued those books. \par
+\par
+SELECT Book_title, Customer_name FROM Books\par
+JOIN IssueStatus ON Books.ISBN = IssueStatus.Isbn_book\par
+JOIN Customer ON IssueStatus.Issued_cust = Customer.Customer_Id;\par
+\par
+-- 4.Display the total count of books in each category.\par
+ \par
+SELECT Category, COUNT(*) as Total_Books FROM Books\par
+GROUP BY Category;\par
+\par
+-- 5.. Retrieve the employee names and their positions for the employees whose salaries are above Rs.50,000. \par
+\par
+SELECT Emp_name, Position FROM Employee\par
+WHERE Salary > 50000;\par
+\par
+-- 6. List the customer names who registered before 2022-01-01 and have not issued any books yet\par
+\par
+SELECT Customer_name FROM Customer\par
+WHERE Reg_date < '2022-01-01'\par
+AND Customer_Id NOT IN (SELECT Issued_cust FROM IssueStatus);\par
+\par
+-- 7.Display the branch numbers and the total count of employees in each branch. \par
+\par
+SELECT Branch_no, COUNT(*) as Total_Employees\par
+FROM Employee\par
+GROUP BY Branch_no;\par
+\par
+-- 8.Display the names of customers who have issued books in the month of June 2023.\par
+\par
+SELECT Customer_name\par
+FROM Customer\par
+JOIN IssueStatus ON Customer.Customer_Id = IssueStatus.Issued_cust\par
+WHERE Issue_date BETWEEN '2023-06-01' AND '2023-06-30';\par
+\par
+-- 9.Retrieve book_title from book table containing history. \par
+\par
+SELECT Book_title\par
+FROM Books\par
+WHERE Book_title LIKE '%history%';\par
+\par
+-- 10.Retrieve the branch numbers along with the count of employees for branches having more than 5 employees\par
+\par
+SELECT Branch_no, COUNT(*) as Total_Employees\par
+FROM Employee\par
+GROUP BY Branch_no\par
+HAVING COUNT(*) > 5;\par
+\par
+-- 11. Retrieve the names of employees who manage branches and their respective branch addresses.\par
+\par
+SELECT Emp_name, Branch_address\par
+FROM Employee\par
+JOIN Branch ON Employee.Branch_no = Branch.Branch_no\par
+WHERE Position = 'Manager';\par
+\par
+-- 12. Display the names of customers who have issued books with a rental price higher than Rs. 25.\par
+\par
+SELECT Customer_name\par
+FROM Customer\par
+JOIN IssueStatus ON Customer.Customer_Id = IssueStatus.Issued_cust\par
+JOIN Books ON IssueStatus.Isbn_book = Books.ISBN\par
+WHERE Rental_Price > 25;\par
+\b0\par
+\par
+}
+ 
